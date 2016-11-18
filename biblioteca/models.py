@@ -4,13 +4,6 @@ from django.utils import timezone
 import os
 
 # Create your models here.
-class Libro(models.Model):
-    titulo  =   models.CharField(max_length=30)
-    portada = models.CharField(max_length=15)
-    #fotografia = models.ImageField(upload_to = '')
-    fecha_publicacion = models.DateField()
-    def __str__(self):
-        return self.titulo
 
 class Autor(models.Model):
     nombres = models.CharField(max_length=40)
@@ -38,18 +31,33 @@ class Pais(models.Model):
     def __str__(self):
         return self.nombre
 
+class Libro(models.Model):
+    titulo  =   models.CharField(max_length=30)
+    #portada = models.CharField(max_length=15)
+    #fotografia = models.ImageField(upload_to = '')
+    fecha_publicacion = models.DateField()
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    editoria = models.ForeignKey(Editorial, on_delete=models.CASCADE)
+    pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.titulo
+
 class InfoLibro(models.Model):
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
     editoria = models.ForeignKey(Editorial, on_delete=models.CASCADE)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
 
-
 class Prestamos(models.Model):
+    comentario = models.CharField(max_length=30)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    usaurio = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    fecha_prestamo = models.DateField()
+    fecha_devolución = models.DateField()
+    def __str__(self):
+        return self.comentario
 
-##---------------------------------------------------------
+#---------------------------------------------------------
 class InfoLibroInLine(admin.TabularInline):
     model = InfoLibro
     extra = 1
@@ -66,6 +74,7 @@ class Editorialdmin (admin.ModelAdmin):
 class PaisAdmin (admin.ModelAdmin):
     inlines = (InfoLibroInLine,)
 
+#---------------------------------------------------
 class PrestamosInLine(admin.TabularInline):
     model = Prestamos
     extra = 1

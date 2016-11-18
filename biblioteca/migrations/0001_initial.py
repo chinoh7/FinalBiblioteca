@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Autor',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('nombres', models.CharField(max_length=40)),
                 ('apellidos', models.CharField(max_length=40)),
                 ('telefono', models.CharField(max_length=15)),
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Editorial',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('nombre', models.CharField(max_length=40)),
                 ('descripcion', models.CharField(max_length=40)),
                 ('telefono', models.CharField(max_length=15)),
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='InfoLibro',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('autor', models.ForeignKey(to='biblioteca.Autor')),
                 ('editoria', models.ForeignKey(to='biblioteca.Editorial')),
             ],
@@ -39,30 +39,34 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Libro',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('titulo', models.CharField(max_length=30)),
                 ('portada', models.CharField(max_length=15)),
                 ('fecha_publicacion', models.DateField()),
+                ('autor', models.ForeignKey(to='biblioteca.Autor')),
+                ('editoria', models.ForeignKey(to='biblioteca.Editorial')),
             ],
         ),
         migrations.CreateModel(
             name='Pais',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('nombre', models.CharField(max_length=40)),
             ],
         ),
         migrations.CreateModel(
             name='Prestamos',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('fecha_prestamo', models.DateField()),
+                ('fecha_devolución', models.DateField()),
                 ('libro', models.ForeignKey(to='biblioteca.Libro')),
             ],
         ),
         migrations.CreateModel(
             name='Usuario',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
                 ('nombres', models.CharField(max_length=40)),
                 ('apellidos', models.CharField(max_length=40)),
                 ('dpi', models.CharField(max_length=15)),
@@ -72,6 +76,11 @@ class Migration(migrations.Migration):
             model_name='prestamos',
             name='usaurio',
             field=models.ForeignKey(to='biblioteca.Usuario'),
+        ),
+        migrations.AddField(
+            model_name='libro',
+            name='pais',
+            field=models.ForeignKey(to='biblioteca.Pais'),
         ),
         migrations.AddField(
             model_name='infolibro',
