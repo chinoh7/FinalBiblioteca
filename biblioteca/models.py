@@ -65,3 +65,13 @@ class Editorialdmin (admin.ModelAdmin):
 
 class PaisAdmin (admin.ModelAdmin):
     inlines = (InfoLibroInLine,)
+
+class PrestamosInLine(admin.TabularInline):
+    model = Prestamos
+    extra = 1
+
+class LibroAdmin (admin.ModelAdmin):
+    inlines = (PrestamosInLine,)
+
+class UsuarioAdmin (admin.ModelAdmin):
+    inlines = (PrestamosInLine,)
